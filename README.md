@@ -1,5 +1,7 @@
 # kotest-playwright-assertions
 
+[![](https://maven-badges.herokuapp.com/maven-central/io.orange-buffalo/kotest-playwright-assertions/badge.svg?style=flat-square)](https://search.maven.org/artifact/io.orange-buffalo/kotest-playwright-assertions)
+
 **kotest-playwright-assertions** provides [Kotest](https://kotest.io/)-style assertions
 for [Playwright](https://playwright.dev/).
 
