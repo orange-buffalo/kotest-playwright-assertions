@@ -112,6 +112,7 @@ publishing {
 jreleaser {
     release {
         github {
+            enabled = !project.version.get().endsWith("-SNAPSHOT")
             uploadAssets = Active.NEVER
             prerelease {
                 enabled = true
