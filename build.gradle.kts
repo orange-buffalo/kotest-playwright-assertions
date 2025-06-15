@@ -131,11 +131,11 @@ jreleaser {
                 formatted = Active.ALWAYS
                 preset = "conventional-commits"
                 skipMergeCommits = true
-                links = true
                 hide {
                     uncategorized = true
                     contributor("[bot]")
                     contributor("orange-buffalo")
+                    contributor("GitHub")
                 }
             }
         }
