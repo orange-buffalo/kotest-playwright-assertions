@@ -43,5 +43,6 @@ jobs:
       env:
         JRELEASER_CONFIG_CONTENT: ${{ secrets.JRELEASER_CONFIG_CONTENT }}
       run: |
+        mkdir -p ~/.jreleaser
         echo "$JRELEASER_CONFIG_CONTENT" > ~/.jreleaser/config.toml
         ./gradlew publish jreleaserFullRelease --scan --console=plain --build-cache
