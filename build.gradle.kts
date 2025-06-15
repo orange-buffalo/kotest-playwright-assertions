@@ -112,7 +112,10 @@ publishing {
 jreleaser {
     release {
         github {
-            enabled = !project.version.get().endsWith("-SNAPSHOT")
+            val shouldSkipGitHubActions = project.version.get().endsWith("-SNAPSHOT")
+            skipTag = shouldSkipGitHubActions
+            skipRelease = shouldSkipGitHubActions
+
             uploadAssets = Active.NEVER
             prerelease {
                 enabled = true
