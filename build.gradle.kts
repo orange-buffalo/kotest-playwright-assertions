@@ -1,20 +1,31 @@
+import org.jreleaser.model.Active
+
 plugins {
     kotlin("jvm") version "2.1.10"
-    id("me.qoomon.git-versioning") version "6.4.4"
+    // version pinned as newer has major JGit changed which is not compatible with jreleaser
+    id("com.github.jmongard.git-semver-plugin") version "0.13.0"
+    id("maven-publish")
+    id("signing")
+    id("org.jreleaser") version "1.17.0"
 }
-
-group = "io.orange-buffalo"
-version = "0.0.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
 }
 
+group = "io.orange-buffalo"
+
+semver {
+    // tags managed by jreleaser
+    createReleaseTag = false
+}
+version = semver.version
+
 val playwrightVersion = "1.52.0"
 
 dependencies {
     api("com.microsoft.playwright:playwright:$playwrightVersion")
-    implementation("io.kotest:kotest-assertions-core:5.9.1")
+    api("io.kotest:kotest-assertions-core:5.9.1")
 
     testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
     testImplementation("io.kotest:kotest-framework-engine:5.9.1")
@@ -22,31 +33,15 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.13.0")
 }
 
-gitVersioning.apply {
-    refs {
-        branch("main") {
-            version = "\${describe.tag.version}-SNAPSHOT"
-        }
-        branch(".+") {
-            version = "\${ref}-SNAPSHOT"
-        }
-        tag("(?<version>.*)") {
-            version = "\${ref.version}"
-        }
-    }
-    rev {
-        version = "\${commit}"
-    }
-}
-
 tasks.test {
     useJUnitPlatform()
 }
 
-val generateLocatorAssertions = tasks.register<io.orangebuffalo.kotestplaywrightassertions.generator.GenerateLocatorAssertionsTask>("generateLocatorAssertions") {
-    targetPlaywrightVersion.set(playwrightVersion)
-    outputDirectory.set(layout.buildDirectory.dir("generated/source/kotlin"))
-}
+val generateLocatorAssertions =
+    tasks.register<io.orangebuffalo.kotestplaywrightassertions.generator.GenerateLocatorAssertionsTask>("generateLocatorAssertions") {
+        targetPlaywrightVersion.set(playwrightVersion)
+        outputDirectory.set(layout.buildDirectory.dir("generated/source/kotlin"))
+    }
 
 sourceSets {
     main {
@@ -68,5 +63,99 @@ gradleEnterprise {
     buildScan {
         termsOfServiceUrl = "https://gradle.com/terms-of-service"
         termsOfServiceAgree = "yes"
+    }
+}
+
+tasks.register<Jar>("sourcesJar") {
+    archiveClassifier.set("sources")
+    from(sourceSets.main.get().allSource)
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+            artifact(tasks["sourcesJar"])
+
+            pom {
+                name.set(project.name)
+                description.set("Kotest assertions for Playwright")
+                url.set("https://github.com/orange-buffalo/kotest-playwright-assertions")
+                licenses {
+                    license {
+                        name.set("The Apache License, Version 2.0")
+                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("orange-buffalo")
+                        name.set("Bogdan Ilchyshyn")
+                        email.set("orange-buffalo@users.noreply.github.com")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:git://github.com/orange-buffalo/kotest-playwright-assertions.git")
+                    developerConnection.set("scm:git:ssh://github.com/orange-buffalo/kotest-playwright-assertions.git")
+                    url.set("https://github.com/orange-buffalo/kotest-playwright-assertions")
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
+        }
+    }
+}
+
+jreleaser {
+    release {
+        github {
+            uploadAssets = Active.NEVER
+            prerelease {
+                enabled = true
+            }
+            changelog {
+                formatted = Active.ALWAYS
+                preset = "conventional-commits"
+                skipMergeCommits = true
+                links = true
+                hide {
+                    uncategorized = true
+                    contributor("[bot]")
+                    contributor("orange-buffalo")
+                }
+            }
+        }
+    }
+    signing {
+        active = Active.ALWAYS
+        armored = true
+    }
+    deploy {
+        maven {
+            mavenCentral {
+                create("release-deploy") {
+                    active = Active.RELEASE
+                    url = "https://central.sonatype.com/api/v1/publisher"
+                    stagingRepository("build/staging-deploy")
+                    javadocJar = false
+                }
+            }
+            nexus2 {
+                create("snapshot-deploy") {
+                    active = Active.SNAPSHOT
+                    url = "https://central.sonatype.com/repository/maven-snapshots/"
+                    snapshotUrl = "https://central.sonatype.com/repository/maven-snapshots/"
+                    applyMavenCentralRules = true
+                    snapshotSupported = true
+                    closeRepository = true
+                    releaseRepository = true
+                    stagingRepository("build/staging-deploy")
+                    javadocJar = false
+                }
+            }
+        }
     }
 }

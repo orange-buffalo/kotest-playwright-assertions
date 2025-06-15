@@ -4,15 +4,13 @@ on: [push]
 
 jobs:
   build:
-    name: "Build and Tests"
+    name: "CI"
     runs-on: ubuntu-24.04
 
     steps:
 
     - name: "Checkout"
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
 
     - name: "Set up JDK"
       uses: actions/setup-java@v4
@@ -39,3 +37,11 @@ jobs:
       with:
         report_paths: "**/build/test-results/**/TEST-*.xml"
         require_tests: false
+
+    - name: "Publish (Pre-) Release"
+      if: ${{ github.ref == 'refs/heads/main' }}
+      env:
+        JRELEASER_CONFIG_CONTENT: ${{ secrets.JRELEASER_CONFIG_CONTENT }}
+      run: |
+        echo "$JRELEASER_CONFIG_CONTENT" > ~/.jreleaser/config.toml
+        ./gradlew publish jreleaserFullRelease --scan --console=plain --build-cache
