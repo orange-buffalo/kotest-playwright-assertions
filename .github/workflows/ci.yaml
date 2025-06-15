@@ -11,6 +11,9 @@ jobs:
 
     - name: "Checkout"
       uses: actions/checkout@v4
+      with:
+        # full history is required for versioning and changelog generation
+        fetch-depth: 0
 
     - name: "Set up JDK"
       uses: actions/setup-java@v4
