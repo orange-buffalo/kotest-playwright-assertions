@@ -71,11 +71,18 @@ tasks.register<Jar>("sourcesJar") {
     from(sourceSets.main.get().allSource)
 }
 
+tasks.register<Jar>("javadocJar") {
+    archiveClassifier.set("javadoc")
+    // javadoc jar is necessary for publishing to Maven Central,
+    // but we don't generate it as it is a Kotlin project
+}
+
 publishing {
     publications {
         create<MavenPublication>("maven") {
             from(components["java"])
             artifact(tasks["sourcesJar"])
+            artifact(tasks["javadocJar"])
 
             pom {
                 name.set(project.name)
