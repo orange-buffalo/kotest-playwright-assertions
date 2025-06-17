@@ -7,7 +7,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.javaparser:javaparser-core:3.26.2")
+    implementation("com.github.javaparser:javaparser-core:3.27.0")
     implementation("com.squareup:kotlinpoet:1.18.1")
     implementation("io.ktor:ktor-client-core:2.3.12")
     implementation("io.ktor:ktor-client-cio:2.3.12")
