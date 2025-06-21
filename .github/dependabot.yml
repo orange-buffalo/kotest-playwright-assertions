@@ -17,3 +17,5 @@ updates:
         patterns:
           - "org.junit.jupiter:*"
           - "org.junit.platform:*"
+    ignore:
+      - dependency-name: "com.github.jmongard.git-semver-plugin"
