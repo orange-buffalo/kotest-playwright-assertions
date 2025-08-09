@@ -29,8 +29,8 @@ dependencies {
 
     testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
     testImplementation("io.kotest:kotest-framework-engine:5.9.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.13.3")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.13.3")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.13.4")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.13.4")
 }
 
 tasks.test {
