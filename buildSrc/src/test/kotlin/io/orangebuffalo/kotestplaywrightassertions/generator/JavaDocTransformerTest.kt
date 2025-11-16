@@ -122,6 +122,30 @@ class JavaDocTransformerTest : FunSpec({
         """.trimIndent()
     }
 
+    test("should convert HTML ordered lists to markdown") {
+        val input = """
+            /**
+             * Requirements:
+             * <ol>
+             * <li> First item</li>
+             * <li> Second item</li>
+             * <li> Third item</li>
+             * </ol>
+             * End of list.
+             */
+        """.trimIndent()
+
+        val result = transformer.transformJavaDoc(input)
+        result shouldBe """
+            Requirements:
+
+            - First item
+            - Second item
+            - Third item
+            End of list.
+        """.trimIndent()
+    }
+
     test("should return empty string for blank javadoc") {
         transformer.transformJavaDoc("") shouldBe ""
         transformer.transformJavaDoc("   ") shouldBe ""

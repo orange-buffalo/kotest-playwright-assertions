@@ -23,13 +23,19 @@ class JavaDocTransformer {
             // Convert <strong> tags to markdown bold
             .replace(Regex("<strong>\\s*", RegexOption.IGNORE_CASE), "**")
             .replace(Regex("\\s*</strong>", RegexOption.IGNORE_CASE), "**")
+            // Convert <ol> and </ol> - just remove them as markdown will auto-number
+            .replace(Regex("</?ol>\\s*", RegexOption.IGNORE_CASE), "\n")
+            // Convert <li> tags to markdown list items
+            .replace(Regex("[ \\t]*<li>\\s*", RegexOption.IGNORE_CASE), "- ")
+            .replace(Regex("\\s*</li>\\s*", RegexOption.IGNORE_CASE), "\n")
             // Convert <p> tags to paragraph breaks
             .replace(Regex("<p>\\s*", RegexOption.IGNORE_CASE), "\n\n")
         
         // Step 3: Convert JavaDoc tags
         result = result
             // Convert <pre>{@code ...}</pre> blocks to markdown code blocks
-            .replace(Regex("<pre>\\s*\\{@code\\s*([^}]+)\\s*}\\s*</pre>", RegexOption.DOT_MATCHES_ALL)) { 
+            // Use non-greedy match (.+?) to properly handle braces in the code
+            .replace(Regex("<pre>\\s*\\{@code\\s*(.+?)\\s*}\\s*</pre>", setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.IGNORE_CASE))) { 
                 "```\n${it.groupValues[1].trim()}\n```"
             }
             // Convert inline {@code ...} to backticks
