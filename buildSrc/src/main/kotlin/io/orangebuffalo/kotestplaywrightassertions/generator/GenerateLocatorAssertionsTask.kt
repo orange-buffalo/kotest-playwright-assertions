@@ -31,11 +31,9 @@ abstract class GenerateLocatorAssertionsTask : DefaultTask() {
         val methods = parser.parseAssertionMethods(sourceCode)
 
         val transformer = JavaDocTransformer()
-        val transformedMethods = methods
-        // TODO #4 improve javdocs conversion
-//        val transformedMethods = methods.map { method ->
-//            method.copy(javadoc = transformer.transformJavaDoc(method.javadoc))
-//        }
+        val transformedMethods = methods.map { method ->
+            method.copy(javadoc = transformer.transformJavaDoc(method.javadoc))
+        }
 
         val generator = KotlinCodeGenerator()
         val kotlinCode = generator.generateExtensionFunctions(transformedMethods)
