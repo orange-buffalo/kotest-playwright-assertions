@@ -38,6 +38,32 @@ class JavaDocTransformer {
             .replace(Regex("<pre>\\s*\\{@code\\s*(.+?)\\s*}\\s*</pre>", setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.IGNORE_CASE))) { 
                 "```\n${it.groupValues[1].trim()}\n```"
             }
+            // Convert {@link Class#method ...} to just the method name in backticks
+            // Format: {@link package.Class#method() Description} or {@link Class#method}
+            .replace(Regex("\\{@link\\s+([^}]+)}")) { match ->
+                val content = match.groupValues[1].trim()
+                // Extract the readable part (after the class/method reference)
+                val parts = content.split(Regex("\\s+"), 2)
+                if (parts.size > 1) {
+                    // Has description: use it
+                    parts[1]
+                } else {
+                    // No description: extract method/class name
+                    val ref = parts[0]
+                    when {
+                        ref.contains("#") -> {
+                            // Has method: extract method name
+                            val methodPart = ref.substringAfter("#").substringBefore("(")
+                            "`$methodPart()`"
+                        }
+                        ref.contains(".") -> {
+                            // Just class: extract simple name
+                            "`${ref.substringAfterLast(".")}`"
+                        }
+                        else -> "`$ref`"
+                    }
+                }
+            }
             // Convert inline {@code ...} to backticks
             .replace(Regex("\\{@code ([^}]+)}")) { "`${it.groupValues[1]}`" }
         

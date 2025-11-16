@@ -146,6 +146,23 @@ class JavaDocTransformerTest : FunSpec({
         """.trimIndent()
     }
 
+    test("should convert {@link} tags") {
+        val input = """
+            /**
+             * Use {@link com.example.Locator#first() Locator.first()} to get the first element.
+             * Also see {@link com.example.Page} for more info.
+             * Or use {@link Locator#last}.
+             */
+        """.trimIndent()
+
+        val result = transformer.transformJavaDoc(input)
+        result shouldBe """
+            Use Locator.first() to get the first element.
+            Also see `Page` for more info.
+            Or use `last()`.
+        """.trimIndent()
+    }
+
     test("should return empty string for blank javadoc") {
         transformer.transformJavaDoc("") shouldBe ""
         transformer.transformJavaDoc("   ") shouldBe ""
