@@ -1,7 +1,7 @@
 import org.jreleaser.model.Active
 
 plugins {
-    kotlin("jvm") version "2.2.21"
+    kotlin("jvm") version "2.3.0"
     // version pinned as newer has major JGit changed which is not compatible with jreleaser
     id("com.github.jmongard.git-semver-plugin") version "0.13.0"
     id("maven-publish")
