@@ -6,7 +6,7 @@ plugins {
     id("com.github.jmongard.git-semver-plugin") version "0.13.0"
     id("maven-publish")
     id("signing")
-    id("org.jreleaser") version "1.21.0"
+    id("org.jreleaser") version "1.22.0"
 }
 
 repositories {
