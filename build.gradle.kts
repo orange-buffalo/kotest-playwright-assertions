@@ -25,10 +25,10 @@ val playwrightVersion = "1.58.0"
 
 dependencies {
     api("com.microsoft.playwright:playwright:$playwrightVersion")
-    api("io.kotest:kotest-assertions-core:6.1.3")
+    api("io.kotest:kotest-assertions-core:6.1.4")
 
-    testImplementation("io.kotest:kotest-runner-junit5:6.1.3")
-    testImplementation("io.kotest:kotest-framework-engine:6.1.3")
+    testImplementation("io.kotest:kotest-runner-junit5:6.1.4")
+    testImplementation("io.kotest:kotest-framework-engine:6.1.4")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.0.3")
 }
