@@ -12,8 +12,8 @@ dependencies {
     implementation("io.ktor:ktor-client-core:3.4.1")
     implementation("io.ktor:ktor-client-cio:3.4.1")
 
-    testImplementation("io.kotest:kotest-runner-junit5:6.1.7")
-    testImplementation("io.kotest:kotest-assertions-core:6.1.7")
+    testImplementation("io.kotest:kotest-runner-junit5:6.1.9")
+    testImplementation("io.kotest:kotest-assertions-core:6.1.9")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.3")
 }
 
