@@ -9,8 +9,8 @@ repositories {
 dependencies {
     implementation("com.github.javaparser:javaparser-core:3.28.1")
     implementation("com.squareup:kotlinpoet:2.3.0")
-    implementation("io.ktor:ktor-client-core:3.4.3")
-    implementation("io.ktor:ktor-client-cio:3.4.3")
+    implementation("io.ktor:ktor-client-core:3.5.0")
+    implementation("io.ktor:ktor-client-cio:3.5.0")
 
     testImplementation("io.kotest:kotest-runner-junit5:6.1.11")
     testImplementation("io.kotest:kotest-assertions-core:6.1.11")
