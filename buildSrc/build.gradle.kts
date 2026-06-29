@@ -14,7 +14,7 @@ dependencies {
 
     testImplementation("io.kotest:kotest-runner-junit5:6.2.1")
     testImplementation("io.kotest:kotest-assertions-core:6.2.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.1.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.1.1")
 }
 
 tasks.test {
