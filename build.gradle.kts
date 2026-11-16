@@ -25,7 +25,7 @@ val playwrightVersion = "1.64.0"
 
 dependencies {
     api("com.microsoft.playwright:playwright:$playwrightVersion")
-    api("io.kotest:kotest-assertions-core:6.2.6")
+    api("io.kotest:kotest-assertions-core:6.2.7")
 
     testImplementation("io.kotest:kotest-runner-junit5:6.2.7")
     testImplementation("io.kotest:kotest-framework-engine:6.2.6")
