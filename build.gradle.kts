@@ -21,7 +21,7 @@ semver {
 }
 version = semver.version
 
-val playwrightVersion = "1.65.0"
+val playwrightVersion = "1.65.1"
 
 dependencies {
     api("com.microsoft.playwright:playwright:$playwrightVersion")
